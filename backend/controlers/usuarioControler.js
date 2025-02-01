@@ -1,10 +1,11 @@
 const Usuario = require('../models/usuario');
-const db = require('/database');
+const db = require('../models/database');
 
 exports.registrarUsuario = async (req, res) => {
     try {
         const { cedula } = req.body;
-
+        const foto = req.file ? req.file.buffer : null; // Capturar la foto
+        
         // Verificar si la cédula ya existe
         const [existe] = await db.execute('SELECT * FROM caracusuarios WHERE cedula = ?', [cedula]);
         if (existe.length > 0) {
@@ -12,7 +13,7 @@ exports.registrarUsuario = async (req, res) => {
         }
 
         // Guardar en la base de datos
-        await Usuario.crearUsuario(req.body);
+        await Usuario.crearUsuario(req.body, foto);
         res.status(201).json({ mensaje: 'Datos guardados con éxito' });
 
     } catch (error) {

@@ -9,7 +9,7 @@ const usuarioControler = require('../controlers/usuarioControler');
 const upload = multer({ storage: multer.memoryStorage() });
 
 
-router.post('/registrar', upload.single('foto'), usuarioControler.registrarUsuario);
+router.post('/registrar', usuarioControler.registrarUsuario);
 
 module.exports = router;
 
