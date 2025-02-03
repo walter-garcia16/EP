@@ -107,15 +107,15 @@ exports.registrarUsuario = async (req, res) => {
     try {
         console.log("Datos recibidos en backend:", req.body); // 🔍 Verifica datos en consola
 
-        const {
-            nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo,
-            direccion, barrio, municipio,fechaInicio, fechaFinal, formacion, aval, observaciones, 
-        } = req.body;
+         const {
+             nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo,
+             direccion, barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, 
+         } = req.body;
 
-        // Validar que no haya valores undefined!
-         if (!nombres || !apellidos || !cedula || !rol || !fechaNacimiento || !edad || !celular || !correo || !direccion || !barrio || !municipio || !fechaInicio || !fechaFinal || !formacion || !aval || !observaciones) {
-            return res.status(400).json({ mensaje: "Debe completar todos los campos" });
-         }
+         // Validar que no haya valores undefined!
+          if (!nombres || !apellidos || !cedula || !rol || !fechaNacimiento || !edad || !celular || !correo || !direccion || !barrio || !municipio || !fechaInicio || !fechaFinal || !formacion || !aval || !observaciones) {
+             return res.status(400).json({ mensaje: "Debe completar todos los campos" });
+          }
 
         // Intentar insertar usuario
         const resultado = await Usuario.crearUsuario(req.body);

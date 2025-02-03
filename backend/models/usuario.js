@@ -4,7 +4,7 @@ class Usuario {
     static async crearUsuario(datos) {
         const {
             cedula, nombres, apellidos, rol, fechaNacimiento, edad, celular, correo, direccion,
-            barrio, municipio, formacion, aval, observaciones, fechaInicio, fechaFinal
+            barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, 
         } = datos;
 
         console.log("Valores antes de insertar:", datos); // 🔍 Verifica que no haya undefined
