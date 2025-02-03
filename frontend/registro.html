@@ -77,11 +77,11 @@
                                 
                                 </div>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <!-- <div class="col-md-4 text-center">
                                 <label class="form-label">Foto</label>
                                 <input type="file" class="form-control" id="foto" accept="image/*" onchange="previewImage(event)">
                                 <img id="fotoPreview" class="img-fluid mt-2" style="max-height: 150px; display: none;">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -130,5 +130,40 @@
             document.getElementById('edad').value = age;
         });
     </script>
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+    
+            const formData = {
+                nombres: document.getElementById("nombres").value.trim(),
+                apellidos: document.getElementById("apellidos").value.trim(),
+                cedula: document.getElementById("cedula").value.trim(),
+                rol: document.getElementById("rol").value,
+                fechaNacimiento: document.getElementById("fechaNacimiento").value,
+                edad: document.getElementById("edad").value,
+                celular: document.getElementById("celular").value.trim(),
+                correo: document.getElementById("correo").value.trim(),
+                direccion: document.getElementById("direccion").value.trim(),
+                barrio: document.getElementById("barrio").value.trim(),
+                municipio: document.getElementById("municipio").value.trim(),
+                fechaIngreso: document.getElementById("fechaInicio").value,
+                fechaFinalizacion: document.getElementById("fechaFinal").value,
+                formacion: document.getElementById("formacion").value,
+                aval: document.getElementById("aval").value.trim(),
+                observaciones: document.getElementById("observaciones").value.trim()
+            };
+    
+            console.log("Datos enviados al backend:", formData); // 🔍 Verificar que no haya undefined
+    
+            const response = await fetch("http://localhost:3000/api/usuarios/registrar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+    
+            const data = await response.json();
+            alert(data.mensaje);
+        });
+    </script>    
 </body>
 </html>

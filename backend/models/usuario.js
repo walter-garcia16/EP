@@ -1,19 +1,29 @@
-const db = require('./database');
+const db = require("../models/database");
 
 class Usuario {
-    static async crearUsuario(datos, foto) {
-        const { nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion, barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones } = datos;
+    static async crearUsuario(datos) {
+        const {
+            cedula, nombres, apellidos, rol, fechaNacimiento, edad, celular, correo, direccion,
+            barrio, municipio, formacion, aval, observaciones, fechaInicio, fechaFinal
+        } = datos;
 
-        try {
-            const [resultado] = await db.execute(
-                'INSERT INTO caracusuarios (nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion, barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion, barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, foto]
-            );
-            return resultado;
-        } catch (error) {
-            console.error('Error al insertar usuario:', error);
-            throw error;
-        }
+        console.log("Valores antes de insertar:", datos); // 🔍 Verifica que no haya undefined
+
+        // // Validar que ningún campo sea undefined antes de la inserción
+        // if (!nombres || !apellidos || !cedula || !rol || !fechaNacimiento || !edad || !celular || !correo || !direccion || !barrio || !municipio || !fechaInicio || !fechaFinal || !formacion || !aval ||!observaciones) {
+        //     return res.status(400).json({ mensaje: "Debe completar todos los campos" });
+        // }
+
+        const sql = `
+            INSERT INTO caracusuarios 
+            (nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion, barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        return db.execute(sql, [
+            nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion,
+            barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, 
+        ]);
     }
 }
 
