@@ -15,7 +15,11 @@ exports.registrarUsuario = async (req, res) => {
             !direccion || !barrio || !municipio || !fechaIngreso || !fechaFinalizacion || !formacion || !aval || !observaciones) {
             return res.status(400).json({ mensaje: "Debe completar todos los campos" });
         }
+        const [usuarioExistente] = await db.execute('SELECT * FROM caracusuarios WHERE cedula = ?', [cedula]);
 
+        if (usuarioExistente.length > 0) {
+            return res.status(400).json({ mensaje: "El usuario ya se encuentra registrado" });
+        }
         // Intentar insertar usuario
         const resultado = await Usuario.crearUsuario(req.body);
 

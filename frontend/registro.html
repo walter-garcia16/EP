@@ -154,16 +154,28 @@
             };
     
             console.log("Datos enviados al backend:", formData); // 🔍 Verificar que no haya undefined
+            try {
+                const response = await fetch("http://localhost:3000/api/usuarios/registrar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
     
-            const response = await fetch("http://localhost:3000/api/usuarios/registrar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
-            });
-    
-            const data = await response.json();
-            alert(data.mensaje);
+                const data = await response.json();
+                alert(data.mensaje);
+                if (response.status === 201) {
+                    limpiarFormulario(); // ✅ Limpiar el formulario después del registro exitoso
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Ocurrió un error al registrar el usuario.");
+            }
         });
-    </script>    
+    
+        function limpiarFormulario() {
+            document.getElementById("registerForm").reset();
+        }
+    </script>
+    
 </body>
 </html>
