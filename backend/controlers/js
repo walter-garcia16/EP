@@ -1,32 +1,32 @@
-const db = require('../database');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+// const db = require('../database');
+// const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
 
-exports.login = (req, res) => {
-    const { usuario, contraseña } = req.body;
-    const sql = 'SELECT * FROM usuarios WHERE usuario = ?';
+// exports.login = (req, res) => {
+//     const { usuario, contraseña } = req.body;
+//     const sql = 'SELECT * FROM usuarios WHERE usuario = ?';
 
-    db.query(sql, [usuario], (err, results) => {
-        if (err) return res.status(500).json({ message: 'Error en el servidor' });
-        if (results.length === 0) return res.status(401).json({ message: 'Usuario no encontrado' });
+//     db.query(sql, [usuario], (err, results) => {
+//         if (err) return res.status(500).json({ message: 'Error en el servidor' });
+//         if (results.length === 0) return res.status(401).json({ message: 'Usuario no encontrado' });
 
-        const user = results[0];
-        const isMatch = bcrypt.compareSync(contraseña, user.contraseña);
+//         const user = results[0];
+//         const isMatch = bcrypt.compareSync(contraseña, user.contraseña);
 
-        if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' });
+//         if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' });
 
-        const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token, rol: user.rol });
-    });
-};
+//         const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '1h' });
+//         res.json({ token, rol: user.rol });
+//     });
+// };
 
-exports.register = (req, res) => {
-    const { usuario, contraseña, rol } = req.body;
-    const hashedPassword = bcrypt.hashSync(contraseña, 10);
-    const sql = 'INSERT INTO usuarios (usuario, contraseña, rol) VALUES (?, ?, ?)';
+// exports.register = (req, res) => {
+//     const { usuario, contraseña, rol } = req.body;
+//     const hashedPassword = bcrypt.hashSync(contraseña, 10);
+//     const sql = 'INSERT INTO usuarios (usuario, contraseña, rol) VALUES (?, ?, ?)';
 
-    db.query(sql, [usuario, hashedPassword, rol], (err, results) => {
-        if (err) return res.status(500).json({ message: 'Error en el servidor' });
-        res.json({ message: 'Usuario registrado correctamente' });
-    });
-};
+//     db.query(sql, [usuario, hashedPassword, rol], (err, results) => {
+//         if (err) return res.status(500).json({ message: 'Error en el servidor' });
+//         res.json({ message: 'Usuario registrado correctamente' });
+//     });
+// };
