@@ -4,7 +4,7 @@ class Usuario {
     static async crearUsuario(datos) {
         const {
             cedula, nombres, apellidos, rol, fechaNacimiento, edad, celular, correo, direccion,
-            barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, 
+            barrio, municipio, fechaIngreso, fechaFinalizacion, formacion, aval, observaciones, 
         } = datos;
 
         console.log("Valores antes de insertar:", datos); // 🔍 Verifica que no haya undefined
@@ -16,13 +16,13 @@ class Usuario {
 
         const sql = `
             INSERT INTO caracusuarios 
-            (nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion, barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones) 
+            (nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion, barrio, municipio, fechaIngreso, fechaFinalizacion, formacion, aval, observaciones) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         return db.execute(sql, [
             nombres, apellidos, cedula, rol, fechaNacimiento, edad, celular, correo, direccion,
-            barrio, municipio, fechaInicio, fechaFinal, formacion, aval, observaciones, 
+            barrio, municipio, fechaIngreso, fechaFinalizacion, formacion, aval, observaciones 
         ]);
     }
 }
