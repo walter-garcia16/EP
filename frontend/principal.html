@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovechadores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Menú lateral -->
+        <nav id="sidebar" class="bg-dark text-white p-3" style="width: 250px; min-height: 100vh;">
+            <h4 class="text-center">Menú</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="#" class="nav-link text-white" onclick="cargarVista('aprovechadores')">Aprovechadores</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">Gestores</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">Requerimientos</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">Actas de Retención</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">Caracterizaciones</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">Informes</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">Administrar</a></li>
+                <li class="nav-item"><a href="login.html" class="nav-link text-danger">Salir</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="p-4" style="flex: 1;">
+            <h2 class="text-center">Registro de Aprovechadores</h2>
+
+            <!-- Foto -->
+            <div class="col-md-4 text-center mb-3">
+                <img id="fotoPreview" src="placeholder.png" alt="Foto del Aprovechador" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                <input type="file" id="foto" class="form-control mt-2" accept="image/*">
+            </div>
+            <form id="formAprovechador" class="row g-3">
+                <div class="col-md-6">
+                    <label for="contrato" class="form-label">Contrato</label>
+                    <input type="text" class="form-control" id="contrato" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control text-uppercase" id="nombre" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="apellido" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control text-uppercase" id="apellido" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="cedula" class="form-label">Cédula</label>
+                    <input type="text" class="form-control" id="cedula" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" id="telefono" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="correo" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="correo" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="fechaNacimiento" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="edad" class="form-label">Edad</label>
+                    <input type="text" class="form-control" id="edad" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="direccionEstablecimiento" class="form-label">Dirección del Establecimiento</label>
+                    <input type="text" class="form-control text-uppercase" id="direccionEstablecimiento" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="tipoventa" class="form-label">Tipo de venta</label>
+                    <select class="form-control" id="tipoventa" required>
+                        <option value="Estacionaria">Estacionaria</option>
+                        <option value="Semi estacionaria">Semi estacionaria</option>
+                        <option value="Ambulante">Ambulante</option>
+                        <option value="Ambulante motorizada">Ambulante motorizada</option>
+                        <option value="Transitoria">Transitoria</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="actividadEconomica" class="form-label">Actividad Económica</label>
+                    <input type="text" class="form-control text-uppercase" id="actividadEconomica" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="direccionResidencia" class="form-label">Dirección Residencia</label>
+                    <input type="text" class="form-control text-uppercase" id="direccionResidencia" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="barrio" class="form-label">Barrio</label>
+                    <input type="text" class="form-control text-uppercase" id="barrio" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="estrato" class="form-label">Estrato</label>
+                    <input type="text" class="form-control" id="estrato" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="nivelSisben" class="form-label">Nivel SISBEN</label>
+                    <input type="text" class="form-control text-uppercase" id="nivelSisben" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="valorM2" class="form-label">Valor M2</label>
+                    <input type="number" class="form-control" id="valorM2" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="ocupacionM2" class="form-label">Ocupación en M2</label>
+                    <input type="number" class="form-control" id="ocupacionM2" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="valortotal" class="form-label">Valor Total</label>
+                    <input type="text" class="form-control" id="valortotal" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="fechaFinalizacion" class="form-label">Fecha de Finalización</label>
+                    <input type="date" class="form-control" id="fechaFinalizacion" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label for="observaciones" class="form-label">Observaciones</label>
+                    <textarea class="form-control text-uppercase" id="observaciones" rows="2" maxlength="255"></textarea>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-primary">Actualizar</button>
+                    <button type="button" class="btn btn-danger">Eliminar</button>
+                    <button type="reset" class="btn btn-secondary">Limpiar</button>
+                </div>
+            </form>
+
+            <!-- Tabla de aprovechadores -->
+            <h3 class="text-center mt-4">Lista de Aprovechadores</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Contrato</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Cédula</th>
+                        <th>Dirección</th>
+                        <th>Actividad Económica</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaAprovechadores">
+                    <!-- Aquí se cargarán los datos -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar vista previa de la foto
+        document.getElementById('foto').addEventListener('change', function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('fotoPreview').src = reader.result;
+            }
+            if (event.target.files.length > 0) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+
+        // Calcular edad
+        document.getElementById('fechaNacimiento').addEventListener('change', function() {
+            let fechaNacimiento = new Date(this.value);
+            let hoy = new Date();
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            document.getElementById('edad').value = edad;
+        });
+
+        // Calcular Valor Total
+        function calcularValorTotal() {
+            let valorM2 = parseFloat(document.getElementById('valorM2').value) || 0;
+            let ocupacionM2 = parseFloat(document.getElementById('ocupacionM2').value) || 0;
+            let total = valorM2 * ocupacionM2;
+            document.getElementById('valortotal').value = total.toFixed(2);
+        }
+
+        document.getElementById('valorM2').addEventListener('input', calcularValorTotal);
+        document.getElementById('ocupacionM2').addEventListener('input', calcularValorTotal);
+    </script>
+</body>
+</html>
