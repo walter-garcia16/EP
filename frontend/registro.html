@@ -151,18 +151,18 @@
             formData.append("formacion", document.getElementById("formacion").value);
             formData.append("aval", document.getElementById("aval").value.trim());
             formData.append("observaciones", document.getElementById("observaciones").value.trim());
-            formData.append("foto", document.getElementById("foto").files[0]); // 📷 Agregar foto
+            formData.append("foto", document.getElementById("foto").files[0]);
     
             try {
                 const response = await fetch("http://localhost:3000/api/usuarios/registrar", {
                     method: "POST",
-                    body: formData // 📌 Enviar como FormData
+                    body: formData //Enviar como FormData
                 });
     
                 const data = await response.json();
                 alert(data.mensaje);
                 if (response.status === 201) {
-                    limpiarFormulario(); // ✅ Limpiar formulario después de guardar
+                    limpiarFormulario(); //Limpia formulario después de guardar
                 }
             } catch (error) {
                 console.error("Error:", error);
