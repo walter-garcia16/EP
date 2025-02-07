@@ -1,5 +1,6 @@
 const Usuario = require('../models/usuario');
 const db = require('../models/database');
+const bcrypt = require('bcrypt');
 
 exports.registrarUsuario = async (req, res) => {
     try {
@@ -41,3 +42,5 @@ exports.registrarUsuario = async (req, res) => {
         res.status(500).json({ mensaje: "Error al registrar usuario", error: error.message });
     }
 };
+
+

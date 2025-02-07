@@ -183,5 +183,25 @@
         document.getElementById('valorM2').addEventListener('input', calcularValorTotal);
         document.getElementById('ocupacionM2').addEventListener('input', calcularValorTotal);
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rol = localStorage.getItem('rol');
+        
+            if (!rol) {
+                alert('No tienes permiso para acceder. Inicia sesión.');
+                window.location.href = 'login.html';
+                return; // Detiene la ejecución del script
+            }
+        
+            // Ocultar opciones según el rol
+            if (rol === 'Gestor') {
+                const adminMenu = document.getElementById('adminMenu');
+                if (adminMenu) {
+                    adminMenu.style.display = 'none';
+                }
+            }
+        });
+        
+    </script>    
 </body>
 </html>

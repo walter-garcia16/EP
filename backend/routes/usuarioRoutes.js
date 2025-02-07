@@ -1,8 +1,8 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const usuarioController = require("../controlers/usuarioControler");
-
+const loginControler = require("../controlers/loginControler");
+const usuarioControler = require("../controlers/usuarioControler");
 const router = express.Router();
 
 // Configurar multer para subir imágenes
@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Ruta para registrar usuario con foto
-router.post("/registrar", upload.single("foto"), usuarioController.registrarUsuario);
-
+router.post("/registrar", upload.single("foto"), usuarioControler.registrarUsuario);
+// Ruta para validar credenciales de usuario
+router.post('/login', loginControler.login);
 module.exports = router;

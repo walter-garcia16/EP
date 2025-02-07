@@ -41,10 +41,48 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            document.getElementById("registerBtn").addEventListener("click", function() {
+                window.location.href = "registro.html";
+            });
+        
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+        try {
+            const response = await fetch('http://localhost:3000/api/usuarios/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+        
+            const data = await response.json();
+        
+            if (response.ok) {
+                // Guardar el rol en localStorage
+                localStorage.setItem("rol", data.rol);
+                alert("Inicio de sesión exitoso");
+                window.location.href = 'principal.html';
+            } else {
+                window.alert("Usuario o contraseña incorrectos");
+                document.getElementById('errorMensaje').innerText = data.error;
+            }
+        } catch (error) {
+            window.alert("Error en el servidor. Intente de nuevo.");
+            console.error('Error en la solicitud:', error);
+            document.getElementById('errorMensaje').innerText = "Error de conexión con el servidor";
+        }
+        });
+        
+    </script>   
+    
     <script>
         document.getElementById("registerBtn").addEventListener("click", function() {
             window.location.href = "registro.html";
         });
-    </script>
+    </script> 
 </body>
 </html>
