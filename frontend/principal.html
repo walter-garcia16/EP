@@ -10,7 +10,7 @@
 <body>
     <div class="d-flex">
         <!-- Menú lateral -->
-        <nav id="sidebar" class="bg-dark text-white p-3" style="width: 250px; min-height: 100vh;">
+        <nav id="sidebar" class="bg-dark text-white p-4" style="width: 180px; min-height: 100vh;">
             <h4 class="text-center">Menú</h4>
             <ul class="nav flex-column">
                 <li class="nav-item"><a href="#" class="nav-link text-white" onclick="cargarVista('aprovechadores')">Aprovechadores</a></li>
@@ -39,12 +39,12 @@
                     <input type="text" class="form-control" id="contrato" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control text-uppercase" id="nombre" required>
+                    <label for="nombres" class="form-label">Nombre</label>
+                    <input type="text" class="form-control text-uppercase" id="nombres" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="apellido" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control text-uppercase" id="apellido" required>
+                    <label for="apellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control text-uppercase" id="apellidos" required>
                 </div>
                 <div class="col-md-6">
                     <label for="cedula" class="form-label">Cédula</label>
@@ -71,8 +71,8 @@
                     <input type="text" class="form-control text-uppercase" id="direccionEstablecimiento" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="tipoventa" class="form-label">Tipo de venta</label>
-                    <select class="form-control" id="tipoventa" required>
+                    <label for="tipoVenta" class="form-label">Tipo de venta</label>
+                    <select class="form-control" id="tipoVenta" required>
                         <option value="Estacionaria">Estacionaria</option>
                         <option value="Semi estacionaria">Semi estacionaria</option>
                         <option value="Ambulante">Ambulante</option>
@@ -105,12 +105,12 @@
                     <input type="number" class="form-control" id="valorM2" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="ocupacionM2" class="form-label">Ocupación en M2</label>
-                    <input type="number" class="form-control" id="ocupacionM2" required>
+                    <label for="ocupacionEspacioM2" class="form-label">Ocupación en M2</label>
+                    <input type="number" class="form-control" id="ocupacionEspacioM2" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="valortotal" class="form-label">Valor Total</label>
-                    <input type="text" class="form-control" id="valortotal" readonly>
+                    <label for="valorTotal" class="form-label">Valor Total</label>
+                    <input type="text" class="form-control" id="valorTotal" readonly>
                 </div>
                 <div class="col-md-6">
                     <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
@@ -151,9 +151,59 @@
             </table>
         </div>
     </div>
-
     <script>
-        // Mostrar vista previa de la foto
+        document.addEventListener("DOMContentLoaded", function () {  
+    document.getElementById("formAprovechador").addEventListener("submit", function(event) {
+        event.preventDefault(); // Evita el recargo de la página
+    
+        const formData = {
+            contrato: document.getElementById("contrato").value.trim(),
+            nombres: document.getElementById("nombres").value.trim(),
+            apellidos: document.getElementById("apellidos").value.trim(),
+            cedula: document.getElementById("cedula").value.trim(),
+            telefono: document.getElementById("telefono").value.trim(),
+            correo: document.getElementById("correo").value.trim(),
+            fechaNacimiento: document.getElementById("fechaNacimiento").value.trim(),
+            edad: document.getElementById("edad").value.trim(),
+            direccionEstablecimiento: document.getElementById("direccionEstablecimiento").value.trim(),
+            tipoVenta: document.getElementById("tipoVenta").value.trim(),
+            actividadEconomica: document.getElementById("actividadEconomica").value.trim(),
+            direccionResidencia: document.getElementById("direccionResidencia").value.trim(),
+            barrio: document.getElementById("barrio").value.trim(),
+            estrato: document.getElementById("estrato").value.trim(),
+            nivelSisben: document.getElementById("nivelSisben").value.trim(),
+            valorM2: document.getElementById("valorM2").value.trim(),
+            ocupacionEspacioM2: document.getElementById("ocupacionEspacioM2").value.trim(),
+            valorTotal: document.getElementById("valorTotal").value.trim(),
+            fechaInicio: document.getElementById("fechaInicio").value.trim(),
+            fechaFinalizacion: document.getElementById("fechaFinalizacion").value.trim(),
+            observaciones: document.getElementById("observaciones").value.trim()
+        };
+    
+        console.log("📤 Enviando datos:", formData); // 🛠️ Verificar en consola
+    
+        fetch("http://localhost:3000/aprovechadores", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("✅ Respuesta del servidor:", data); // 🛠️ Verificar respuesta
+            alert("Aprovechador guardado correctamente");
+            document.getElementById("formAprovechador").reset();
+        })
+        .catch(error => {
+            console.error("❌ Error en la solicitud:", error);
+            alert("Error al guardar el aprovechador");
+        });
+    });
+});
+</script>
+    <script>
+        // Cargar vista
         document.getElementById('foto').addEventListener('change', function(event) {
             let reader = new FileReader();
             reader.onload = function() {
@@ -175,13 +225,13 @@
         // Calcular Valor Total
         function calcularValorTotal() {
             let valorM2 = parseFloat(document.getElementById('valorM2').value) || 0;
-            let ocupacionM2 = parseFloat(document.getElementById('ocupacionM2').value) || 0;
-            let total = valorM2 * ocupacionM2;
-            document.getElementById('valortotal').value = total.toFixed(2);
+            let ocupacionEspacioM2 = parseFloat(document.getElementById('ocupacionEspacioM2').value) || 0;
+            let total = valorM2 * ocupacionEspacioM2;
+            document.getElementById('valorTotal').value = total.toFixed(2);
         }
 
         document.getElementById('valorM2').addEventListener('input', calcularValorTotal);
-        document.getElementById('ocupacionM2').addEventListener('input', calcularValorTotal);
+        document.getElementById('ocupacionEspacioM2').addEventListener('input', calcularValorTotal);
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -201,7 +251,7 @@
                 }
             }
         });
-        
+    
     </script>    
 </body>
 </html>
