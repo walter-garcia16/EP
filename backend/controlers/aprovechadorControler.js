@@ -1,11 +1,9 @@
-// controllers/aprovechadorController.js
+//controllers/aprovechadorController.js
 const express = require('express');
 const router = express.Router();
-const Aprovechador = require('./aprovechador');
-
-module.exports = router;
 const db = require('../models/database');
 
+module.exports = router;
 exports.crearAprovechador = async (req, res) => {
     try {
         const {
