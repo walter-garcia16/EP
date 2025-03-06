@@ -13,7 +13,7 @@
             <div class="col-lg-10">
                 <div class="card shadow-lg p-4">
                     <h3 class="text-center">Registro de Usuario</h3>
-                    <form id="registerForm">
+                    <form id="registerForm" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row">
@@ -78,9 +78,13 @@
                                 </div>
                             </div>
                             <div class="col-md-4 text-center">
-                                <label class="form-label">Foto</label>
-                                <input type="file" class="form-control" id="foto" accept="image/*" onchange="previewImage(event)">
-                                <img id="fotoPreview" class="img-fluid mt-2" style="max-height: 200px; display: none;">
+                                <label class="form-label">Foto del Usuario</label>
+                                <img id="fotoPreview" 
+                                src="/uploads/usuario.png"
+                                alt = "Foto del usuario" 
+                                class="img-fluid mt-2" 
+                                style="max-height: 250px;">
+                                <input type="file" class="form-control" id="foto" accept="image/*" onchange="previewImage (event)">
                             </div>
                         </div>
                         <div class="row">
@@ -107,7 +111,7 @@
                         </div>
                         <div class="text-center mt-3">
                             <button type="submit" class="btn btn-primary">Guardar y Solicitar Credenciales</button>
-                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                            <button type="reset" class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
                         </div>
                     </form>
                 </div>
@@ -116,19 +120,61 @@
     </div>
     <script>
         function previewImage(event) {
+            const img = document.getElementById('fotoPreview');
             const reader = new FileReader();
-            reader.onload = function () {
-                const img = document.getElementById('fotoPreview');
-                img.src = reader.result;
-                img.style.display = 'block';
+        
+            if (event.target.files.length > 0) {
+                reader.onload = function () {
+                    img.src = reader.result; // Actualiza el src con la imagen seleccionada
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            } else {
+                img.src = "backend/uploads/usuario.png"; // Vuelve al placeholder
             }
-            reader.readAsDataURL(event.target.files[0]);
         }
+        
+        // Calcular edad exacta considerando meses y días
         document.getElementById('fechaNacimiento').addEventListener('change', function() {
-            const birthDate = new Date(this.value);
-            const age = new Date().getFullYear() - birthDate.getFullYear();
-            document.getElementById('edad').value = age;
+            let fechaNacimiento = new Date(this.value);
+            let hoy = new Date();
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            
+            // Ajuste si el cumpleaños aún no ha ocurrido en este año
+            if (
+                hoy.getMonth() < fechaNacimiento.getMonth() || 
+                (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())
+            ) {
+                edad--;
+            }
+
+            document.getElementById('edad').value = edad;
         });
+    </script>
+    <script>
+        function limpiarFormulario() {
+            // Seleccionar el formulario completo
+            const formulario = document.getElementById("registerForm");
+        
+            // Resetear todos los campos del formulario
+            formulario.reset();
+        
+            // Seleccionar específicamente el campo de la foto y limpiarlo
+            const campoFoto = document.getElementById("foto");
+            if (campoFoto) {
+                campoFoto.value = ""; // Vaciar el campo de la foto
+            }
+        
+            // Restablecer la imagen de previsualización al valor predeterminado
+            const fotoPreview = document.getElementById("fotoPreview");
+            if (fotoPreview) {
+                fotoPreview.src = "/uploads/usuario.png"; // Reemplazar con tu imagen predeterminada
+            }
+        
+            // Opcional: Mostrar un mensaje visual de que el formulario fue limpiado
+            console.log("Formulario y foto limpiados correctamente");
+        }
+        
+        
     </script>
     <script>
         document.getElementById("registerForm").addEventListener("submit", async function(event) {
@@ -166,14 +212,13 @@
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("Ocurrió un error al registrar el usuario.");
+                window.alert("Ocurrió un error al registrar el usuario." + data.mensaje);
+                limpiarFormulario ();   
+
             }
         });
     
-        function limpiarFormulario() {
-            document.getElementById("registerForm").reset();
-            document.getElementById("fotoPreview").style.display = "none";
-        }
+       
     </script>
 </body>
 </html>

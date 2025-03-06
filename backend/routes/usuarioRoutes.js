@@ -8,14 +8,14 @@ const router = express.Router();
 // Configurar multer para subir imágenes
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Carpeta donde se guardarán las fotos
+        cb(null, path.join(__dirname, "../uploads")); // Carpeta donde se guardarán las fotos
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname);
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 // Ruta para registrar usuario con foto
 router.post("/registrar", upload.single("foto"), usuarioControler.registrarUsuario);

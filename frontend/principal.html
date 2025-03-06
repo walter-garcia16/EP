@@ -30,10 +30,14 @@
 
             <!-- Foto -->
             <div class="col-md-4 text-center mb-3">
-                <img id="fotoPreview" src="placeholder.png" alt="Foto del Aprovechador" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
-                <input type="file" id="foto" class="form-control mt-2" accept="image/*">
+                <img id="fotoPreview" 
+                src="/uploads/usuario.png" 
+                alt="Foto del Aprovechador" 
+                class="img-thumbnail" 
+                style="max-height: 200px;">
+                <input type="file" class="form-control" id="foto" accept="image/*" onchange="previewImage (event)">
             </div>
-            <form id="formAprovechador" class="row g-3">
+            <form id="formAprovechador" enctype="multipart/form-data" method="post" class="row g-3">
                 <div class="col-md-6">
                     <label for="contrato" class="form-label">Contrato</label>
                     <input type="text" class="form-control" id="contrato" required>
@@ -128,7 +132,7 @@
                     <button type="submit" class="btn btn-success">Guardar</button>
                     <button type="button" class="btn btn-primary">Actualizar</button>
                     <button type="button" class="btn btn-danger">Eliminar</button>
-                    <button type="reset" class="btn btn-secondary">Limpiar</button>
+                    <button type="reset" class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
                 </div>
             </form>
 
@@ -151,107 +155,114 @@
             </table>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {  
-    document.getElementById("formAprovechador").addEventListener("submit", function(event) {
-        event.preventDefault(); // Evita el recargo de la página
-    
-        const formData = {
-            contrato: document.getElementById("contrato").value.trim(),
-            nombres: document.getElementById("nombres").value.trim(),
-            apellidos: document.getElementById("apellidos").value.trim(),
-            cedula: document.getElementById("cedula").value.trim(),
-            telefono: document.getElementById("telefono").value.trim(),
-            correo: document.getElementById("correo").value.trim(),
-            fechaNacimiento: document.getElementById("fechaNacimiento").value.trim(),
-            edad: document.getElementById("edad").value.trim(),
-            direccionEstablecimiento: document.getElementById("direccionEstablecimiento").value.trim(),
-            tipoVenta: document.getElementById("tipoVenta").value.trim(),
-            actividadEconomica: document.getElementById("actividadEconomica").value.trim(),
-            direccionResidencia: document.getElementById("direccionResidencia").value.trim(),
-            barrio: document.getElementById("barrio").value.trim(),
-            estrato: document.getElementById("estrato").value.trim(),
-            nivelSisben: document.getElementById("nivelSisben").value.trim(),
-            valorM2: document.getElementById("valorM2").value.trim(),
-            ocupacionEspacioM2: document.getElementById("ocupacionEspacioM2").value.trim(),
-            valorTotal: document.getElementById("valorTotal").value.trim(),
-            fechaInicio: document.getElementById("fechaInicio").value.trim(),
-            fechaFinalizacion: document.getElementById("fechaFinalizacion").value.trim(),
-            observaciones: document.getElementById("observaciones").value.trim()
-        };
-    
-        console.log("📤 Enviando datos:", formData); // 🛠️ Verificar en consola
-    
-        fetch("http://localhost:3000/aprovechadores", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("✅ Respuesta del servidor:", data); // 🛠️ Verificar respuesta
-            alert("Aprovechador guardado correctamente");
-            document.getElementById("formAprovechador").reset();
-        })
-        .catch(error => {
-            console.error("❌ Error en la solicitud:", error);
-            alert("Error al guardar el aprovechador");
-        });
-    });
-});
-</script>
-    <script>
-        // Cargar vista
-        document.getElementById('foto').addEventListener('change', function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById('fotoPreview').src = reader.result;
-            }
-            if (event.target.files.length > 0) {
-                reader.readAsDataURL(event.target.files[0]);
-            }
-        });
 
-        // Calcular edad
+    <script>
+        function previewImage(event) {
+            const img = document.getElementById('fotoPreview');
+            const reader = new FileReader();
+        
+            if (event.target.files.length > 0) {
+                reader.onload = function () {
+                    img.src = reader.result; // Actualiza el src con la imagen seleccionada
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            } else {
+                img.src = "backend/uploads/usuario.png"; // Vuelve al placeholder
+            }
+        }
+        
+        // Calcular edad exacta considerando meses y días
         document.getElementById('fechaNacimiento').addEventListener('change', function() {
             let fechaNacimiento = new Date(this.value);
             let hoy = new Date();
             let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-            document.getElementById('edad').value = edad;
-        });
+            
+            // Ajuste si el cumpleaños aún no ha ocurrido en este año
+            if (
+                hoy.getMonth() < fechaNacimiento.getMonth() || 
+                (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())
+            ) {
+                edad--;
+            }
 
+            document.getElementById('edad').value = edad;
+            
+        });
+    </script>
+    <script>
         // Calcular Valor Total
         function calcularValorTotal() {
             let valorM2 = parseFloat(document.getElementById('valorM2').value) || 0;
             let ocupacionEspacioM2 = parseFloat(document.getElementById('ocupacionEspacioM2').value) || 0;
-            let total = valorM2 * ocupacionEspacioM2;
-            document.getElementById('valorTotal').value = total.toFixed(2);
+            document.getElementById('valorTotal').value = (valorM2 * ocupacionEspacioM2).toFixed(2);
         }
 
         document.getElementById('valorM2').addEventListener('input', calcularValorTotal);
         document.getElementById('ocupacionEspacioM2').addEventListener('input', calcularValorTotal);
     </script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const rol = localStorage.getItem('rol');
         
-            if (!rol) {
-                alert('No tienes permiso para acceder. Inicia sesión.');
-                window.location.href = 'login.html';
-                return; // Detiene la ejecución del script
-            }
-        
-            // Ocultar opciones según el rol
-            if (rol === 'Gestor') {
-                const adminMenu = document.getElementById('adminMenu');
-                if (adminMenu) {
-                    adminMenu.style.display = 'none';
-                }
-            }
+        document.addEventListener("DOMContentLoaded", function () {  
+            document.getElementById("formAprovechador").addEventListener("submit", async function (event) {
+                event.preventDefault(); // Evita recargar la página
+                
+                //const formData = new FormData(this); // Captura todos los campos automáticamente
+                const formData = new FormData(); // Captura todo el formulario, incluyendo la imagen
+            formData.append("contrato", document.getElementById("contrato").value.trim());
+            formData.append("nombres", document.getElementById("nombres").value.trim());
+            formData.append("apellidos", document.getElementById("apellidos").value.trim());
+            formData.append("cedula", document.getElementById("cedula").value.trim());
+            formData.append("telefono", document.getElementById("telefono").value.trim());
+            formData.append("correo", document.getElementById("correo").value.trim());
+            formData.append("fechaNacimiento", document.getElementById("fechaNacimiento").value);
+            formData.append("edad", document.getElementById("edad").value.trim());
+            formData.append("direccionEstablecimiento", document.getElementById("direccionEstablecimiento").value.trim());
+            formData.append("tipoVenta", document.getElementById("tipoVenta").value);
+            formData.append("actividadEconomica", document.getElementById("actividadEconomica").value.trim());
+            formData.append("direccionResidencia", document.getElementById("direccionResidencia").value.trim());
+            formData.append("barrio", document.getElementById("barrio").value.trim());
+            formData.append("estrato", document.getElementById("estrato").value.trim());
+            formData.append("nivelSisben", document.getElementById("nivelSisben").value.trim());
+            formData.append("valorM2", document.getElementById("valorM2").value.trim());
+            formData.append("ocupacionEspacioM2", document.getElementById("ocupacionEspacioM2").value.trim());
+            formData.append("valorTotal", document.getElementById("valorTotal").value.trim());
+            formData.append("fechaInicio", document.getElementById("fechaInicio").value);
+            formData.append("fechaFinalizacion", document.getElementById("fechaFinalizacion").value);
+            formData.append("observaciones", document.getElementById("observaciones").value.trim());
+            formData.append("foto", document.getElementById("foto").files[0]);
+
+            console.log("📤 Enviando datos:", formData); // 🛠️ Verificar en consola
+            fetch("http://localhost:3000/aprovechadores", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("✅ Respuesta del servidor:", data); // 🛠️ Verificar respuesta
+                alert("Aprovechador guardado correctamente");
+                document.getElementById("formAprovechador").reset();
+            })
+            .catch(error => {
+                console.error("❌ Error en la solicitud:", error);
+                alert("Error al guardar el aprovechador");
+            });
         });
     
-    </script>    
+        
+            function limpiarFormulario() {
+                document.getElementById("formAprovechador").reset();
+                const campoFoto = document.getElementById("foto");
+                if (campoFoto) campoFoto.value = ""; // Vaciar el campo de la foto
+                const fotoPreview = document.getElementById("fotoPreview");
+                if (fotoPreview) fotoPreview.src = "/uploads/usuario.png"; 
+            }
+        });
+        
+    </script>
 </body>
 </html>
+      
