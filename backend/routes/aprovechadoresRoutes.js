@@ -80,4 +80,6 @@ router.get("/", aprovechadorController.listarAprovechadores);
 router.put("/:cedula", upload.single("foto"), aprovechadorController.actualizarAprovechadores);
 router.delete("/:cedula", aprovechadorController.eliminarAprovechadores);
 
+router.post('/', aprovechadorControler.crearAprovechador);
+
 module.exports = router;
